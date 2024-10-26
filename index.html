@@ -83,6 +83,8 @@
 
     </head>
     <body class="defult-home">
+      <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v21.0"></script>
         <!-- Preloader area start here -->
         <div id="loading">
             <div id="loading-center">
@@ -174,7 +176,8 @@ background-image: linear-gradient(315deg, #bdd4e7 0%, #8693ab 74%);
                 </div>
             </nav>
             <!-- Canvas Menu end -->
-        </header>
+        </
+        >
         <!--Header End-->
         <section>
 
@@ -582,12 +585,46 @@ background-image: linear-gradient(315deg, #bdd4e7 0%, #8693ab 74%);
             </div>
             </div>
         </section>
-        <section class="container-fluid my-3  py-3" >
+      <!--  <section class="container-fluid my-3  py-3" >
           <center>
           <h3 class="text-white text-center"><span class="badge badge-pill badge-success">Our Latest Updates</span></h3>
-<a class="twitter-timeline" data-width="800" data-height="800" href="https://twitter.com/hinduupm?ref_src=twsrc%5Etfw">Tweets by hinduupm</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<a class="twitter-timeline" data-width="800" data-height="800" href="https://twitter.com/hinduupm?ref_src=twsrc%5Etfw">Tweets by hinduupm</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+<!--<section id="latest-updates">
+  <h2>Latest Updates</h2>
+  <div class="updates-container" data-width="800" data-height="800">
+<script>
+async function loadUpdates() {
+  try {
+    const response = await fetch('/updates.json');
+    if (!response.ok) throw new Error('Network response was not ok');
+    const updates = await response.json();
+    const container = document.querySelector('.updates-container');
+
+    updates.forEach(update => {
+      const updateItem = document.createElement('div');
+      updateItem.classList.add('update-item');
+      updateItem.innerHTML = `
+        <img src="${update.image}" alt="${update.description}">
+        <div class="update-info">
+          <h3>${new Date(update.date).toDateString()}</h3>
+          <p>${update.description}</p>
+        </div>
+      `;
+      container.appendChild(updateItem);
+    });
+  } catch (error) {
+    console.error('Error loading updates:', error);
+  }
+}
+document.addEventListener('DOMContentLoaded', loadUpdates);
+</script>
+</section>-->
+<section>
+    <center>
+    <h3 class="text-white text-center"><span class="badge badge-pill badge-success">Our Latest Updates</span></h3>
+<div class="fb-page" data-href="https://www.facebook.com/hinduupm" data-tabs="timeline" data-width="800" data-height="800" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/hinduupm" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/himduupm">Our Latest Activities</a></blockquote></div>
 </center>
-        </section>
+</section>
 
 
 <section class="mb-0 py-3 alert" id="foot">

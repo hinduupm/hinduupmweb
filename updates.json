@@ -1,0 +1,12 @@
+[
+  {
+    "image": "images/updates/1.jpeg",
+    "date": "2024-10-25",
+    "description": "Test activity 1"
+  },
+  {
+  "image": "images/updates/2.jpeg", 
+    "date": "2024-10-24",
+    "description": "Test activity 2"
+  }
+]

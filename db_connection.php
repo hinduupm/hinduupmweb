@@ -3,7 +3,7 @@
 $servername = "localhost"; // Replace if your hosting specifies a different host
 $username = "hinduupm"; // Replace with your database username
 $password = "Srisarguru@2024"; // Replace with your database password
-$dbname = "hinduupm"; // Replace with your database name
+$dbname = "hinduupm_db"; // Replace with your database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

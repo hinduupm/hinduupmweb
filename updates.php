@@ -19,7 +19,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Daily Spiritual Activities</h1>
         <?php include 'fetch_activities.php'; // Your PHP file to retrieve and display data ?>
     </div>
 </body>

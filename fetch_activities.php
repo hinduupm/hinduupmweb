@@ -8,7 +8,7 @@ $result = $conn->query($query);
 if ($result->num_rows > 0) {
     // Loop through each activity and display it
     while ($row = $result->fetch_assoc()) {
-        echo "<div style='border: 1px solid #ccc; margin: 10px; padding: 10px;'>";
+        echo "<div style='border: none'>";
         /*echo "<h2>" . htmlspecialchars($row['title']) . "</h2>"; // Activity title*/
        /* echo "<p>" . htmlspecialchars($row['description']) . "</p>"; // Activity description*/
         echo "<p><small>Date: " . htmlspecialchars($row['activity_date']) . "</small></p>"; // Activity date

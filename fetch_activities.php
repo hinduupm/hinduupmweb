@@ -10,8 +10,8 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<div style='border: none'>";
         /*echo "<h2>" . htmlspecialchars($row['title']) . "</h2>"; // Activity title*/
-       /* echo "<p>" . htmlspecialchars($row['description']) . "</p>"; // Activity description*/
-        echo "<p><small>Date: " . htmlspecialchars($row['activity_date']) . "</small></p>"; // Activity date
+        echo "<p>" . htmlspecialchars($row['description']) . "</p>"; // Activity description*/
+        /*echo "<p><small>" . htmlspecialchars($row['activity_date']) . "</small></p>"; // Activity date*/
         // Display image if it exists
         if (!empty($row['image_url'])) {
             echo "<img src='" . htmlspecialchars($row['image_url']) . "' alt='" . htmlspecialchars($row['title']) . "' style='max-width: 100%; height: auto;' />";

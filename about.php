@@ -6,7 +6,7 @@
           $tab = $_GET['tab'];
          }
          else{
-          $tab = "tab1";
+          $tab = "tab1";        
          }
  ?>
 

@@ -9,9 +9,10 @@ if ($conn->connect_error) {
 // Process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
-    $title = $_POST['title'];
+    $place = $_POST['place'];
     $description = $_POST['description'];
     $activity_date = $_POST['activity_date'];
+    $location = $_POST['location'];
 
     // Handle image upload
     $target_dir = "images/uploads/";
@@ -19,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
         // Insert into database
-        $sql = "INSERT INTO spiritual_activities (type, title, description, image_url, activity_date, created_at) 
-                VALUES ('$type', '$title', '$description', '$target_file', '$activity_date', NOW())";
+        $sql = "INSERT INTO spiritual_activities (activity_type_id, activity_place_id, location, description, image_url, activity_date, created_at) 
+                VALUES ('$type', '$place', '$location', '$description', '$target_file', '$activity_date', NOW())";
 
         if ($conn->query($sql) === TRUE) {
             echo "Activity uploaded successfully!";

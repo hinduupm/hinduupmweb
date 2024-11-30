@@ -2,7 +2,7 @@
 include 'db_connection.php'; // Include your database connection file
 
 // Query to fetch all activities, ordered by date (newest first)
-$query = "SELECT * FROM spiritual_activities ORDER BY activity_date DESC";
+$query = "SELECT * FROM spiritual_activities ORDER BY id DESC LIMIT 10";
 $result = $conn->query($query);
 
 if ($result->num_rows > 0) {

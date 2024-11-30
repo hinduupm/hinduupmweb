@@ -1,0 +1,5 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Redirect /login to login.php
+RewriteRule ^login$ login.php [L]

@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $stmt->bind_param("siisssi", $description, $activity_type_id, $activity_place_id, $activity_date, $location, $target_file, $id);
 
     if ($stmt->execute()) {
-    header("Location: viewActivities.php?message=success");
+    header("Location: viewactivities.php?message=success");
     } else {
-    header("Location: viewActivities.php?message=error");
+    header("Location: viewactivities.php?message=error");
     }
     exit;
 }

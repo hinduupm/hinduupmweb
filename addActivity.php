@@ -62,7 +62,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $placesList = $conn->query("SELECT place_id, place_name FROM activity_place");
     ?>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Update Spiritual Activity</h1>
+        <h1 class="text-center mb-4">Add New Spiritual Activity</h1>
         <form action="upload_activity.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
             <label for="type">Activity Type:</label>
@@ -103,6 +103,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="viewactivities.php" class="btn btn-primary">Back</a>
             </div>
         </form>
     </div>
@@ -152,3 +153,4 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     </script>
 </body>
 </html>
+

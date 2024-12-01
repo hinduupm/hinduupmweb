@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Set session and redirect
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
-        header("Location: addActivity.php");
+        header("Location: viewactivities.php");
         exit;
     } else {
         $error_message = "Invalid username or password!";

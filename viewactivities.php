@@ -9,12 +9,24 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 include 'db_connection.php';
 
-// Fetch all activities
 
+// Pagination variables
+$limit = 10; // Number of records per page
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+
+// Fetch total records count
+$total_result = $conn->query("SELECT COUNT(*) AS total FROM spiritual_activities");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Fetch records for the current page
 $sql = "SELECT a.id, a.activity_date,  t.type_name AS activity_type, p.place_name, a.location,  a.description,  a.image_url  
         FROM spiritual_activities a
         JOIN activity_types t ON a.activity_type_id = t.id
-        JOIN activity_place p ON p.place_id = activity_place_id";
+        JOIN activity_place p ON p.place_id = activity_place_id
+        LIMIT $limit OFFSET $offset";
 
 $result = $conn->query($sql);
 ?>
@@ -69,7 +81,9 @@ $result = $conn->query($sql);
                             </td>
                             <td>
                                 <a href="editActivity.php?id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="deleteActivity.php?id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this activity?');">Delete</a>
+                                <a href="deleteActivity.php?id=<?= $row['id']; ?>" 
+                                    class="btn btn-danger btn-sm" 
+                                    onclick="return confirm('Are you sure you want to delete this activity?');">Delete</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -80,6 +94,33 @@ $result = $conn->query($sql);
                 <?php endif; ?>
             </tbody>
         </table>
+          <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center">
+                <?php if ($page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="viewActivities.php?page=<?= $page - 1; ?>">Previous</a>
+                    </li>
+                <?php endif; ?>
+                
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?= $i === $page ? 'active' : ''; ?>">
+                        <a class="page-link" href="viewActivities.php?page=<?= $i; ?>"><?= $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+                
+                <?php if ($page < $total_pages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="viewActivities.php?page=<?= $page + 1; ?>">Next</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
     </div>
 
       <!-- Bootstrap Modal -->
@@ -115,8 +156,14 @@ $result = $conn->query($sql);
                     modalBody.innerHTML = '<p class="text-danger">Error updating activity.</p>';
                 } else if (message === 'upload_error') {
                     modalBody.innerHTML = '<p class="text-danger">Error uploading the image.</p>';
+                } else if(message === 'Activity deleted successfully!'){
+                    modalBody.innerHTML = '<p class="text-danger">Activity deleted successfully!</p>';
+                } else if(message === 'Error deleting activity!'){
+                    modalBody.innerHTML = '<p class="text-danger">Error deleting activity!</p>';
+                }else if(message === 'Activity not found!'){
+                    modalBody.innerHTML = '<p class="text-danger">Activity not found!</p>';
                 }
-
+                
                 // Show the modal
                 const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
                 messageModal.show();

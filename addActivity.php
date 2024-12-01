@@ -14,6 +14,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Upload Activity</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS Bundle (optional for components like modals) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -33,7 +37,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     h1 {
         text-align: center;
-        color: #333;
+        color: darkgreen;
         margin-bottom: 20px;
     }
 
@@ -90,7 +94,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         }
     }
 </style>
-
 </head>
 <body>
 
@@ -105,26 +108,27 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $activityList = $conn->query("SELECT id, type_name FROM activity_types");
     $placesList = $conn->query("SELECT place_id, place_name FROM activity_place");
     ?>
-    <div class="form-container">
+    <div class="container mt-5">
     
-    <h1>Upload Activity</h1>
+    <h1  class="text-center mb-4">Update Spiritual Activity</h1>
     <form action="upload_activity.php" method="POST" enctype="multipart/form-data">
 
 
     <label for="type">Activity Type:</label>
-    <select name="type" id="type" required>
+    <select class="form-select" name="type" id="type" required>
         <?php while ($row = $activityList->fetch_assoc()): ?>
             <option value="<?= $row['id']; ?>"><?= $row['type_name']; ?></option>
         <?php endwhile; ?>
-    </select><br><br>
+    </select>
 
+    <div class="mb-3">
     <label for="place">Activity Place:</label>
     <select name="place" id="place" required>
         <?php while ($row = $placesList->fetch_assoc()): ?>
             <option value="<?= $row['place_id']; ?>"><?= $row['place_name']; ?></option>
         <?php endwhile; ?>
-    </select><br><br>
-
+    </select>
+    </div>
         <!-- <label for="type">Activity Type:</label>
         <select name="type" id="type" required>
         <option value="Hospital_Annadhanam">Hospital_Annadhanam</option>
@@ -134,20 +138,29 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         <option value="Wall_Painting">Wall_Painting</option>
         </select><br><br> -->
 
+        <div class="mb-3">
         <label for="location">Location Details :</label>
-        <input type="text" name="location" id="location" required><br><br>
-
+        <input type="text" name="location" id="location" required>
+        </div>
         
+        <div class="mb-3">
         <label for="description">Description:</label>
-        <textarea name="description" id="description" rows="4" required></textarea><br><br>
-        
+        <textarea name="description" id="description" rows="4" required></textarea>
+        </div>
+
+         <div class="mb-3"> 
         <label for="date">Date:</label>
-        <input type="date" name="activity_date" id="date" required><br><br>
-        
+        <input type="date" name="activity_date" id="date" required>
+        </div>
+
+        <div class="mb-3">
         <label for="image">Upload Image:</label>
-        <input type="file" name="image" id="image" accept="image/*" ><br><br>
-        
+        <input type="file" name="image" id="image" accept="image/*" >
+        </div>
+
+        <div class="text-center">
         <button type="submit">Submit</button>
+        </div>
     </form>
 
      <!-- Display message -->

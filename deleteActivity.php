@@ -36,18 +36,18 @@ if (isset($_GET['id'])) {
             }
 
             // Redirect with success message
-            header("Location: viewActivities.php?message=Activity deleted successfully!&type=success");
+            header("Location: viewactivities.php?message=Activity deleted successfully!&type=success");
         } else {
             // Redirect with error message
-            header("Location: viewActivities.php?message=Error deleting activity!&type=error");
+            header("Location: viewactivities.php?message=Error deleting activity!&type=error");
         }
     } else {
         // Redirect if activity not found
-        header("Location: viewActivities.php?message=Activity not found!&type=error");
+        header("Location: viewactivities.php?message=Activity not found!&type=error");
     }
 } else {
     // Redirect if no `id` parameter
-    header("Location: viewActivities.php?message=Invalid request!&type=error");
+    header("Location: viewactivities.php?message=Invalid request!&type=error");
 }
 exit;
 ?>

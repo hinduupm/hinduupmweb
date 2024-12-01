@@ -99,19 +99,19 @@ $result = $conn->query($sql);
             <ul class="pagination justify-content-center">
                 <?php if ($page > 1): ?>
                     <li class="page-item">
-                        <a class="page-link" href="viewActivities.php?page=<?= $page - 1; ?>">Previous</a>
+                        <a class="page-link" href="viewactivities.php?page=<?= $page - 1; ?>">Previous</a>
                     </li>
                 <?php endif; ?>
                 
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <li class="page-item <?= $i === $page ? 'active' : ''; ?>">
-                        <a class="page-link" href="viewActivities.php?page=<?= $i; ?>"><?= $i; ?></a>
+                        <a class="page-link" href="viewactivities.php?page=<?= $i; ?>"><?= $i; ?></a>
                     </li>
                 <?php endfor; ?>
                 
                 <?php if ($page < $total_pages): ?>
                     <li class="page-item">
-                        <a class="page-link" href="viewActivities.php?page=<?= $page + 1; ?>">Next</a>
+                        <a class="page-link" href="viewactivities.php?page=<?= $page + 1; ?>">Next</a>
                     </li>
                 <?php endif; ?>
             </ul>
@@ -163,7 +163,7 @@ $result = $conn->query($sql);
                 }else if(message === 'Activity not found!'){
                     modalBody.innerHTML = '<p class="text-danger">Activity not found!</p>';
                 }
-                
+
                 // Show the modal
                 const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
                 messageModal.show();

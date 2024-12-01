@@ -9,7 +9,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 
 // Hardcoded credentials
 $valid_username = "hinduupm";
-$valid_password = "Srisarguru@2024";
+$valid_password = "admin";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

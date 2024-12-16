@@ -14,7 +14,8 @@ if ($result->num_rows > 0) {
         echo "<div style='border: none'>";
         /*echo "<h2>" . htmlspecialchars($row['title']) . "</h2>"; // Activity title*/
 
-        echo "<p>Date : " . htmlspecialchars($row['activity_date']) . " , Place : " . htmlspecialchars($row['place_name']) .  " </p>"; // Activity description*/
+
+        echo "<p>Date : " . htmlspecialchars($row['activity_date']) . " , Place : " . htmlspecialchars($row['location']) . ", " . htmlspecialchars($row['place_name']) .  " </p>"; // Activity description*/
         /*echo "<p><small>" . htmlspecialchars($row['activity_date']) . "</small></p>"; // Activity date*/
         // Display image if it exists
         if (!empty($row['image_url'])) {

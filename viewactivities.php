@@ -26,7 +26,9 @@ $sql = "SELECT a.id, a.activity_date,  t.type_name AS activity_type, p.place_nam
         FROM spiritual_activities a
         JOIN activity_types t ON a.activity_type_id = t.id
         JOIN activity_place p ON p.place_id = activity_place_id
-        LIMIT $limit OFFSET $offset";
+        ORDER BY a.activity_date desc
+        LIMIT $limit OFFSET $offset
+        ";
 
 $result = $conn->query($sql);
 ?>

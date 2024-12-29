@@ -80,14 +80,21 @@
         transform: rotate(0deg);
     }
 }
-
 .scroll-indicator {
-    position: fixed; /* Stays at the bottom of the screen */
-    bottom: 20px; /* Adjust as needed */
+    position: fixed;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000; /* Ensure it stays above other elements */
-    animation: bounce 2s infinite;
+    z-index: 1000;
+    font-size: 1.5rem; /* Make the icon larger */
+    color: #333; /* Use a darker color */
+    font-weight: bold; /* Make the text and icon bolder */
+    animation: bounce 2s infinite; /* Add bounce effect */
+    transition: opacity 0.5s ease; /* Smooth fade-out effect */
+}
+
+.scroll-indicator span {
+    color: #333; /* Same darker color for the text */
 }
 
 @keyframes bounce {
@@ -100,6 +107,11 @@
     60% {
         transform: translate(-50%, 5px);
     }
+}
+
+.hidden {
+    opacity: 0; /* Fully transparent */
+    pointer-events: none; /* Prevent interaction when hidden */
 }
 
         </style>
@@ -283,9 +295,9 @@ background-image: linear-gradient(315deg, #bdd4e7 0%, #8693ab 74%);
               </a>
             </div>
         </div>
-        <div class="scroll-indicator text-center">
-            <span class="d-block text-white mb-2"></span>
-            <i class="bi bi-chevron-down"></i>
+        <div id="scroll-indicator" class="scroll-indicator text-center">
+            <span class="d-block mb-2"></span>
+            <i class="bi bi-chevron-down"></i>            
         </div>
             <!-- Services Start -->
 			<!-- <section id="rs-services" class="rs-services-3 rs-service-style1 sec-color pt-5 pb-2">
@@ -905,6 +917,14 @@ function enableMute() {
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script>
+          document.addEventListener('scroll', function () {
+          const indicator = document.getElementById('scroll-indicator');
+          if (window.scrollY > 0) {
+            indicator.classList.add('hidden'); // Add the hidden class
+          }
+          });
+        </script>
     </body>
 
 </html>

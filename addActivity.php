@@ -61,6 +61,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $activityList = $conn->query("SELECT id, type_name FROM activity_types");
     $placesList = $conn->query("SELECT place_id, place_name FROM activity_place");
     ?>
+    <nav class="navbar navbar-dark" style="background: linear-gradient(315deg,#bdd4e7,#8693ab);">
+        <span class="navbar-brand mb-0 h1 ms-3">Hindu UPM — Admin</span>
+        <div class="ms-auto me-3">
+            <a href="viewactivities.php" class="btn btn-light btn-sm me-2">View Activities</a>
+            <a href="logout.php" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Add New Spiritual Activity</h1>
         <form action="upload_activity.php" method="POST" enctype="multipart/form-data">
@@ -74,11 +81,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
             <div class="mb-3">
                 <label for="place">Activity Place:</label>
-                <select class="form-select" name="place" id="place" required>
-                    <?php while ($row = $placesList->fetch_assoc()): ?>
-                        <option value="<?= $row['place_id']; ?>"><?= $row['place_name']; ?></option>
-                    <?php endwhile; ?>
-                </select>
+                <div class="input-group">
+                    <select class="form-select" name="place" id="place" required>
+                        <?php while ($row = $placesList->fetch_assoc()): ?>
+                            <option value="<?= $row['place_id']; ?>"><?= $row['place_name']; ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addPlaceModal" title="Add New Location">
+                        + Add New
+                    </button>
+                </div>
             </div>
 
             <div class="mb-3">
@@ -108,6 +120,33 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         </form>
     </div>
 
+    <!-- Add New Location Modal -->
+    <div class="modal fade" id="addPlaceModal" tabindex="-1" aria-labelledby="addPlaceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPlaceModalLabel">Add New Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="new_place_name" class="form-label">Place Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="new_place_name" placeholder="e.g. New Jersey">
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_sabai" class="form-label">Sabai</label>
+                        <input type="text" class="form-control" id="new_sabai" placeholder="e.g. USA">
+                    </div>
+                    <div id="place_modal_msg"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="savePlaceBtn">Save Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap Modal -->
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -127,6 +166,55 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     </div>
 
     <script>
+        document.getElementById('savePlaceBtn').addEventListener('click', function () {
+            const placeName = document.getElementById('new_place_name').value.trim();
+            const sabai = document.getElementById('new_sabai').value.trim();
+            const msgDiv = document.getElementById('place_modal_msg');
+
+            if (!placeName) {
+                msgDiv.innerHTML = '<p class="text-danger">Place name is required.</p>';
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            const formData = new FormData();
+            formData.append('place_name', placeName);
+            formData.append('sabai', sabai);
+
+            fetch('add_place.php', { method: 'POST', body: formData })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        const select = document.getElementById('place');
+                        const option = new Option(data.place_name + (data.sabai ? ' (' + data.sabai + ')' : ''), data.place_id, true, true);
+                        select.add(option);
+                        bootstrap.Modal.getInstance(document.getElementById('addPlaceModal')).hide();
+                        document.getElementById('new_place_name').value = '';
+                        document.getElementById('new_sabai').value = '';
+                        msgDiv.innerHTML = '';
+                    } else {
+                        msgDiv.innerHTML = '<p class="text-danger">' + data.message + '</p>';
+                    }
+                })
+                .catch(() => {
+                    msgDiv.innerHTML = '<p class="text-danger">Failed to save. Please try again.</p>';
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.textContent = 'Save Location';
+                });
+        });
+
+        // Reset modal fields when closed
+        document.getElementById('addPlaceModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('new_place_name').value = '';
+            document.getElementById('new_sabai').value = '';
+            document.getElementById('place_modal_msg').innerHTML = '';
+        });
+
         // Check if a message exists in the URL parameters
         document.addEventListener("DOMContentLoaded", function () {
             const params = new URLSearchParams(window.location.search);

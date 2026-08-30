@@ -1,11 +1,14 @@
 <?php
 // Database connection
-$servername = "localhost"; // Replace if your hosting specifies a different host
-$username = "hinduupm"; // Replace with your database username
-$password = "Srisarguru@2024"; // Replace with your database password
-$dbname = "hinduupm_db"; // Replace with your database name
+// Local (MAMP): host=127.0.0.1, port=8889
+// Production (cPanel): host=127.0.0.1, port=3306
+$servername = "127.0.0.1";
+$port = 8889; // Change to 3306 on production cPanel
+$username = "u276642767_hinduupm";
+$password = "Srisarguru@2026";
+$dbname = "u276642767_hinduupm_db";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
 // Check connection
 if ($conn->connect_error) {

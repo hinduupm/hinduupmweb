@@ -9,7 +9,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 
 // Hardcoded credentials
 $valid_username = "hinduupm";
-$valid_password = "admin";
+$valid_password = "HinduUPM@2024!";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Set session and redirect
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
-        header("Location: viewactivities.php");
+        header("Location: addActivity.php");
         exit;
     } else {
         $error_message = "Invalid username or password!";

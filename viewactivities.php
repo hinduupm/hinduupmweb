@@ -45,6 +45,13 @@ $result = $conn->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+    <nav class="navbar navbar-dark" style="background: linear-gradient(315deg,#bdd4e7,#8693ab);">
+        <span class="navbar-brand mb-0 h1 ms-3">Hindu UPM — Admin</span>
+        <div class="ms-auto me-3">
+            <a href="addActivity.php" class="btn btn-light btn-sm me-2">Add Activity</a>
+            <a href="logout.php" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
     <div class="container mt-5">
         <h1 class="text-center mb-4">View Spiritual Activities</h1>
          <!-- Add Activity Button -->

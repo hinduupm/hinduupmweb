@@ -6,6 +6,7 @@ $query = "SELECT a.activity_date, t.type_name AS activity_type, p.place_name,
           FROM spiritual_activities a
           JOIN activity_types t ON a.activity_type_id = t.id
           JOIN activity_place p ON p.place_id = a.activity_place_id
+          WHERE a.status = 'published'
           ORDER BY a.activity_date DESC LIMIT 10";
 
 $result = $conn->query($query);

@@ -16,7 +16,7 @@ $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
 // Fetch total records count
-$total_result = $conn->query("SELECT COUNT(*) AS total FROM spiritual_activities");
+$total_result = $conn->query("SELECT COUNT(*) AS total FROM spiritual_activities WHERE status = 'published'");
 $total_row = $total_result->fetch_assoc();
 $total_records = $total_row['total'];
 $total_pages = ceil($total_records / $limit);
@@ -26,6 +26,7 @@ $sql = "SELECT a.id, a.activity_date,  t.type_name AS activity_type, p.place_nam
         FROM spiritual_activities a
         JOIN activity_types t ON a.activity_type_id = t.id
         JOIN activity_place p ON p.place_id = activity_place_id
+        WHERE a.status = 'published'
         ORDER BY a.activity_date desc
         LIMIT $limit OFFSET $offset
         ";
@@ -48,6 +49,7 @@ $result = $conn->query($sql);
     <nav class="navbar navbar-dark" style="background: linear-gradient(315deg,#bdd4e7,#8693ab);">
         <span class="navbar-brand mb-0 h1 ms-3">Hindu UPM — Admin</span>
         <div class="ms-auto me-3">
+            <a href="pendingActivities.php" class="btn btn-light btn-sm me-2">Pending Posters</a>
             <a href="addActivity.php" class="btn btn-light btn-sm me-2">Add Activity</a>
             <a href="logout.php" class="btn btn-outline-light btn-sm">Logout</a>
         </div>

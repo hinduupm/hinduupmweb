@@ -21,7 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_regenerate_id(true);
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
-        header("Location: addActivity.php");
+        // Back to the page that asked for a login, such as a poster review link
+        $next = $_SESSION['after_login'] ?? '';
+        unset($_SESSION['after_login']);
+        $safe = $next !== '' && $next[0] === '/' && substr($next, 0, 2) !== '//';
+        header("Location: " . ($safe ? $next : "addActivity.php"));
         exit;
     } else {
         $error_message = "Invalid username or password!";

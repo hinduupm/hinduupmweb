@@ -15,6 +15,10 @@ ALTER TABLE spiritual_activities
     ADD UNIQUE KEY uniq_image_hash (image_hash),
     ADD KEY idx_status (status);
 
+-- Tamil text from posters needs utf8mb4; older tables may be latin1.
+ALTER TABLE spiritual_activities CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE activity_place CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Posters can arrive before their type or place is known.
 ALTER TABLE spiritual_activities
     MODIFY activity_type_id INT NULL,

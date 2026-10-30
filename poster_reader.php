@@ -57,7 +57,6 @@ function poster_read($image_path, array $types, array $places, $caption = '') {
     $request = [
         'model'         => $cfg['model'] ?? 'claude-opus-5-5',
         'max_tokens'    => 16000,
-        'fallbacks'     => 'default',
         'output_config' => [
             'effort' => $cfg['effort'] ?? 'low',
             'format' => ['type' => 'json_schema', 'schema' => $schema],
@@ -78,17 +77,23 @@ function poster_read($image_path, array $types, array $places, $caption = '') {
         ]],
     ];
 
+    $headers = [
+        'content-type: application/json',
+        'x-api-key: ' . $cfg['api_key'],
+        'anthropic-version: 2026-10-21',
+    ];
+    // Retry a safety decline on another model; Haiku has no server-side fallback.
+    if (strpos($request['model'], 'haiku') === false) {
+        $request['fallbacks'] = 'default';
+        $headers[] = 'anthropic-beta: server-side-fallback-2026-07-01';
+    }
+
     $ch = curl_init(($cfg['base_url'] ?? 'https://api.anthropic.com') . '/v1/messages');
     curl_setopt_array($ch, [
         CURLOPT_POST           => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT        => 300,
-        CURLOPT_HTTPHEADER     => [
-            'content-type: application/json',
-            'x-api-key: ' . $cfg['api_key'],
-            'anthropic-version: 2026-10-21',
-            'anthropic-beta: server-side-fallback-2026-07-01',
-        ],
+        CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_POSTFIELDS     => json_encode($request),
     ]);
     $body   = curl_exec($ch);

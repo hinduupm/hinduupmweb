@@ -39,7 +39,7 @@ return [
     // Claude API key from platform.claude.com, used to read the posters.
     'anthropic' => [
         'api_key' => '',
-        'model'   => 'claude-opus-5-5',
+        'model'   => 'claude-opus-5-5',   // or 'claude-haiku-5-5', much cheaper
         'effort'  => 'low',
     ],
 ];

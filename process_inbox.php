@@ -1,12 +1,15 @@
 <?php
 // Cron job: picks up posters emailed to the posters address, has Claude read
 // them, and emails the approvers a link to review each one.
-// cPanel > Cron Jobs, every 5 minutes:
-//   php /home/<account>/public_html/process_inbox.php
-if (PHP_SAPI !== 'cli') {
+// hPanel > Advanced > Cron Jobs, every 1-5 minutes:
+//   /usr/bin/php /home/<account>/domains/hinduupm.org/public_html/process_inbox.php
+// Refuse web requests. Hosting cron may run php-cgi rather than php-cli,
+// so check for a web request instead of the SAPI name.
+if (isset($_SERVER['REQUEST_METHOD'])) {
     http_response_code(404);
     exit;
 }
+echo date('Y-m-d H:i:s') . " poster check started\n";
 
 require_once __DIR__ . '/mail_client.php';
 require_once __DIR__ . '/activity_lib.php';
@@ -21,6 +24,7 @@ const LOOKBACK_DAYS = 3;
 // One run at a time, in case a run takes longer than the cron interval.
 $lock = fopen(sys_get_temp_dir() . '/hinduupm_process_inbox.lock', 'c');
 if (!flock($lock, LOCK_EX | LOCK_NB)) {
+    echo "previous run still going, skipping\n";
     exit;
 }
 

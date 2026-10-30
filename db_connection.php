@@ -1,17 +1,23 @@
 <?php
-// Database connection
-// Local (MAMP): host=127.0.0.1, port=8889
-// Production (cPanel): host=127.0.0.1, port=3306
-$servername = "127.0.0.1";
-$port = 8889; // Change to 3306 on production cPanel
-$username = "u276642767_hinduupm";
-$password = "Srisarguru@2026";
-$dbname = "u276642767_hinduupm_db";
+// Database connection. Credentials live in the private config file,
+// see config.example.php.
+require_once __DIR__ . '/config_loader.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
+$db = hinduupm_config()['db'];
+
+try {
+    $conn = new mysqli($db['host'], $db['username'], $db['password'], $db['name'], (int) $db['port']);
+} catch (mysqli_sql_exception $e) {
+    $conn = null;
+    $error = $e->getMessage();
+}
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$conn || $conn->connect_error) {
+    error_log('hinduupm: database connection failed: ' . ($conn ? $conn->connect_error : $error));
+    http_response_code(500);
+    die("Database connection failed.");
 }
+
+$conn->set_charset('utf8mb4');
 ?>

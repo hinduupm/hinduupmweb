@@ -7,17 +7,18 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     exit;
 }
 
-// Hardcoded credentials
-$valid_username = "hinduupm";
-$valid_password = "HinduUPM@2024!";
+// Admin credentials come from the private config file (see config.example.php)
+require_once __DIR__ . '/config_loader.php';
+$admin = hinduupm_config()['admin'];
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = (string) ($_POST['username'] ?? '');
+    $password = (string) ($_POST['password'] ?? '');
 
-    if ($username === $valid_username && $password === $valid_password) {
+    if (hash_equals($admin['username'], $username) && password_verify($password, $admin['password_hash'])) {
         // Set session and redirect
+        session_regenerate_id(true);
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
         header("Location: addActivity.php");

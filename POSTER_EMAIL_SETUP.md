@@ -1,8 +1,8 @@
 # Emailed poster setup
 
-Volunteers email an activity poster to **hinduupm+posters@gmail.com**. To do that from WhatsApp, open the poster, tap Share and choose Gmail. Every few minutes the website checks that address, and Claude reads the Tamil title, district, place and date. The approvers then get an email with a summary and a link to `pendingActivities.php`. They check the details there and press Publish. The volunteer gets an email once their poster is live.
+Volunteers email an activity poster to **hinduupm.updates@gmail.com**. To do that from WhatsApp, open the poster, tap Share and choose Gmail. Every few minutes the website checks that address, and Claude reads the Tamil title, district, place and date. The approvers then get an email with a summary and a link to `pendingActivities.php`. They check the details there and press Publish. The volunteer gets an email once their poster is live.
 
-Mail sent to the `+posters` address arrives in the normal hinduupm@gmail.com inbox. The website reads only messages addressed to `+posters`, from senders on the approved list. It never marks any mail as read, so the rest of the org's mail stays untouched.
+hinduupm.updates@gmail.com is used only for posters, so the website's password for it gives no access to the org's main hinduupm@gmail.com mail. The website reads only mail from senders on the approved list, and it never marks anything as read.
 
 Do these steps once, in order.
 
@@ -12,9 +12,9 @@ Open phpMyAdmin and run `migration_posters.sql`. Existing activities stay publis
 
 ## 2. Gmail
 
-1. Sign in to hinduupm@gmail.com and turn on 2-Step Verification under Google Account > Security, if it isn't on already.
+1. Sign in to hinduupm.updates@gmail.com and turn on 2-Step Verification under Google Account > Security, if it isn't on already.
 2. Open Google Account > Security > App passwords. Create one named "website" and copy the 16-character password.
-   - The app password can read and send the org's mail. Keep it only in the server config file. You can revoke it at any time from the same page.
+   - Keep the app password only in the server config file. You can revoke it at any time from the same page.
 3. IMAP is on by default for Gmail. If it has been turned off, turn it on in Gmail Settings > Forwarding and POP/IMAP.
 
 ## 3. Claude API key
@@ -39,7 +39,7 @@ php /home/oan0s2tg1t72/public_html/process_inbox.php
 
 ## Trying it
 
-From an address on the list, email a poster to hinduupm+posters@gmail.com. Use the subject or body for any correction, for example "date is 31-10-2026".
+From an address on the list, email a poster to hinduupm.updates@gmail.com. Use the subject or body for any correction, for example "date is 31-10-2026".
 
 Within about 5 minutes the approvers should get an email with the link. Open it, check the details and press Publish.
 

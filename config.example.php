@@ -25,9 +25,9 @@ return [
     // Mailbox that receives the posters. Volunteers send posters to
     // poster_address; only mail sent to that address is read.
     'mail' => [
-        'username'       => 'hinduupm@gmail.com',
+        'username'       => 'hinduupm.updates@gmail.com',
         'app_password'   => '',   // Google Account > Security > App passwords
-        'poster_address' => 'hinduupm+posters@gmail.com',
+        'poster_address' => 'hinduupm.updates@gmail.com',
         'imap_host'      => 'ssl://imap.gmail.com',
         'imap_port'      => 993,
         'smtp_host'      => 'ssl://smtp.gmail.com',

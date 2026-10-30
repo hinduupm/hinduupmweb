@@ -29,7 +29,7 @@ try {
     $imap = new ImapClient($cfg['imap_host'], $cfg['imap_port'], $cfg['username'], $cfg['app_password']);
     $uids = $imap->search_to($cfg['poster_address'], new DateTime('-' . LOOKBACK_DAYS . ' days'));
 } catch (Throwable $e) {
-    error_log('hinduupm inbox: ' . $e->getMessage());
+    inbox_log('inbox: ' . $e->getMessage());
     exit(1);
 }
 
@@ -38,28 +38,35 @@ $finished = array_map('intval', array_column($conn->query(
     "SELECT imap_uid FROM poster_inbox WHERE imap_uid IS NOT NULL AND (status <> 'received' OR attempts >= " . MAX_ATTEMPTS . ")"
 )->fetch_all(MYSQLI_ASSOC), 'imap_uid'));
 
-foreach (array_diff($uids, $finished) as $uid) {
+$new = array_diff($uids, $finished);
+echo date('Y-m-d H:i:s') . ' checked ' . $cfg['poster_address'] . ': ' . count($uids) . ' emails in the last ' . LOOKBACK_DAYS . ' days, ' . count($new) . " to look at\n";
+
+foreach ($new as $uid) {
     try {
         $mail = mail_parse($imap->fetch($uid));
     } catch (Throwable $e) {
-        error_log('hinduupm inbox uid ' . $uid . ': ' . $e->getMessage());
+        inbox_log('inbox uid ' . $uid . ': ' . $e->getMessage());
         continue;
     }
 
     $row = inbox_row($conn, $mail, $uid);
-    if (!$row || $row['status'] !== 'received' || $row['attempts'] >= MAX_ATTEMPTS) {
+    if ($row['status'] === 'ignored') {
+        echo 'ignored email from ' . $mail['from'] . " (not in approvers or submitters)\n";
+    }
+    if ($row['status'] !== 'received' || $row['attempts'] >= MAX_ATTEMPTS) {
         continue;
     }
 
     $conn->query("UPDATE poster_inbox SET attempts = attempts + 1 WHERE id = " . (int) $row['id']);
     try {
         $count = inbox_process($conn, $mail);
+        echo 'email from ' . $mail['from'] . ': ' . $count . " new poster(s)\n";
         $stmt = $conn->prepare("UPDATE poster_inbox SET status = 'done', posters = ?, error = NULL WHERE id = ?");
         $stmt->bind_param("ii", $count, $row['id']);
         $stmt->execute();
         $stmt->close();
     } catch (Throwable $e) {
-        error_log('hinduupm inbox ' . $row['id'] . ': ' . $e->getMessage());
+        inbox_log('inbox ' . $row['id'] . ': ' . $e->getMessage());
         $failed = $row['attempts'] + 1 >= MAX_ATTEMPTS;
         $status = $failed ? 'failed' : 'received';
         $msg = $e->getMessage();
@@ -151,7 +158,7 @@ function inbox_process(mysqli $conn, array $mail) {
         try {
             mail_send($approver, 'ஒப்புதலுக்கு புதிய போஸ்டர்', "சரிபார்த்து வெளியிட இணைப்பை திறக்கவும்:\n\n" . $body . 'அனுப்பியவர்: ' . $mail['from']);
         } catch (Throwable $e) {
-            error_log('hinduupm mail to ' . $approver . ': ' . $e->getMessage());
+            inbox_log('mail to ' . $approver . ': ' . $e->getMessage());
         }
     }
     if (!mail_is_approver($mail['from'])) {
@@ -164,7 +171,7 @@ function inbox_reply(array $mail, $subject, $text) {
     try {
         mail_send($mail['from'], $subject, $text);
     } catch (Throwable $e) {
-        error_log('hinduupm mail to ' . $mail['from'] . ': ' . $e->getMessage());
+        inbox_log('mail to ' . $mail['from'] . ': ' . $e->getMessage());
     }
 }
 
@@ -179,5 +186,11 @@ function inbox_shrink_for_reader($path) {
     $out = tempnam(sys_get_temp_dir(), 'poster') . '.jpg';
     imagejpeg($small, $out, 85);
     return $out;
+}
+
+// Errors go to the PHP error log and to the cron output.
+function inbox_log($message) {
+    error_log('hinduupm ' . $message);
+    echo $message . "\n";
 }
 ?>

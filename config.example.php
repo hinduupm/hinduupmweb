@@ -19,24 +19,21 @@ return [
         'password_hash' => '',
     ],
 
-    // Public address of the site, used in links sent over WhatsApp.
+    // Public address of the site, used in links in the review emails.
     'site_url' => 'https://hinduupm.org',
 
-    // WhatsApp Business Cloud API (developers.facebook.com > your app > WhatsApp > API Setup).
-    'whatsapp' => [
-        'phone_number_id' => '',
-        'access_token'    => '',   // permanent System User token
-        'app_secret'      => '',   // App settings > Basic > App secret, used to verify webhook calls
-        'verify_token'    => '',   // any random string; enter the same one in the webhook setup
-        'graph_version'   => 'v24.0',
-        // Numbers in international format without "+", e.g. 919876543210.
-        'approvers'       => [],   // may publish posters
-        'submitters'      => [],   // may forward posters (approvers are always allowed)
-        // Optional approved template used to reach an approver who has not
-        // messaged the bot in the last 24 hours. Its body takes one parameter:
-        // the poster summary.
-        'review_template' => '',
-        'template_language' => 'ta',
+    // Mailbox that receives the posters. Volunteers send posters to
+    // poster_address; only mail sent to that address is read.
+    'mail' => [
+        'username'       => 'hinduupm@gmail.com',
+        'app_password'   => '',   // Google Account > Security > App passwords
+        'poster_address' => 'hinduupm+posters@gmail.com',
+        'imap_host'      => 'ssl://imap.gmail.com',
+        'imap_port'      => 993,
+        'smtp_host'      => 'ssl://smtp.gmail.com',
+        'smtp_port'      => 465,
+        'approvers'      => [],   // email addresses that review and publish posters
+        'submitters'     => [],   // addresses that may send posters (approvers always may)
     ],
 
     // Claude API key from platform.claude.com, used to read the posters.

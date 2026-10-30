@@ -13,6 +13,7 @@ if (empty($_SESSION['csrf'])) {
 
 include 'db_connection.php';
 require_once __DIR__ . '/activity_lib.php';
+require_once __DIR__ . '/mail_client.php';
 
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,6 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action'] === 'publish') {
             $problem = activity_publish($conn, $id, $reviewer);
             $message = $problem ? 'Saved, but not published: ' . $problem . '.' : 'Published.';
+            // Let the volunteer who sent the poster know it is live.
+            $submitter = $problem ? null : activity_get($conn, $id)['submitted_by'];
+            if ($submitter && strpos($submitter, '@') !== false) {
+                try {
+                    mail_send($submitter, 'போஸ்டர் வெளியிடப்பட்டது',
+                        'நீங்கள் அனுப்பிய போஸ்டர் இணையதளத்தில் வெளியிடப்பட்டது: ' . hinduupm_config()['site_url'] . "\nநன்றி!");
+                } catch (Throwable $e) {
+                    error_log('hinduupm mail to ' . $submitter . ': ' . $e->getMessage());
+                }
+            }
         } else {
             $message = 'Saved.';
         }

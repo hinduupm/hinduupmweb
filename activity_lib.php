@@ -1,5 +1,5 @@
 <?php
-// Shared helpers for activities that arrive as WhatsApp posters.
+// Shared helpers for activities that arrive as emailed posters.
 
 function activity_types(mysqli $conn) {
     return $conn->query("SELECT id, type_name, description FROM activity_types ORDER BY id")->fetch_all(MYSQLI_ASSOC);
@@ -44,7 +44,7 @@ function activity_create_pending(mysqli $conn, array $fields, $image_url, $image
         "INSERT INTO spiritual_activities
          (activity_type_id, activity_place_id, location, description, image_url, activity_date, created_at,
           status, source, title, district, new_place_name, image_hash, submitted_by, reader_notes)
-         VALUES (?, ?, ?, ?, ?, ?, NOW(), 'pending', 'whatsapp', ?, ?, ?, ?, ?, ?)"
+         VALUES (?, ?, ?, ?, ?, ?, NOW(), 'pending', 'email', ?, ?, ?, ?, ?, ?)"
     );
     $stmt->bind_param(
         "iissssssssss",
@@ -120,7 +120,7 @@ function activity_place_id_for(mysqli $conn, $name) {
     return $id;
 }
 
-// One-message summary used in WhatsApp replies.
+// Short summary used in the review emails.
 function activity_summary(array $activity) {
     $place = $activity['place_name'] ?: (($activity['new_place_name'] ?? '') ? $activity['new_place_name'] . ' (புதியது)' : '?');
     $lines = [

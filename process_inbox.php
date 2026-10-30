@@ -11,6 +11,18 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 }
 echo date('Y-m-d H:i:s') . " poster check started\n";
 
+// php-cgi applies the web time limit and hides fatal errors; undo both so
+// slow Gmail or Claude calls finish and any crash shows in the cron output.
+set_time_limit(0);
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+register_shutdown_function(function () {
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        echo 'fatal: ' . $e['message'] . ' in ' . basename($e['file']) . ':' . $e['line'] . "\n";
+    }
+});
+
 require_once __DIR__ . '/mail_client.php';
 require_once __DIR__ . '/activity_lib.php';
 require_once __DIR__ . '/poster_reader.php';
@@ -29,6 +41,7 @@ if (!flock($lock, LOCK_EX | LOCK_NB)) {
 }
 
 $cfg = mail_config();
+echo 'connecting to ' . $cfg['imap_host'] . ' as ' . $cfg['username'] . "\n";
 try {
     $imap = new ImapClient($cfg['imap_host'], $cfg['imap_port'], $cfg['username'], $cfg['app_password']);
     $uids = $imap->search_to($cfg['poster_address'], new DateTime('-' . LOOKBACK_DAYS . ' days'));
